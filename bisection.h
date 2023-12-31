@@ -2,6 +2,7 @@
 #include <math.h>
 #include <vector>
 #include "Interval.h"
+#include "Function.h"
 
 double function(double);
 

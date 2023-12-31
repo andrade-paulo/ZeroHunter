@@ -5,12 +5,16 @@ int main() {
 	// Bisection test
 	Interval interv(-4, 2);
 
+	double aproximation;
+
+	Function func;
+
 	cout << "-=-=- Bisection method -=-=-" << endl;
 	try {
-		double aproximation = bisectionMethod(interv, 0.0001);
+		aproximation = bisectionMethod(interv, 0.00001);
 		cout << "Aproximation: " << aproximation << endl;
 
-		cout << "Function value: " << function(aproximation) << endl;
+		cout << "Function value: " << func.evaluate(aproximation) << endl;
 	}
 	catch (exception e) {
 		cout << e.what() << endl;
@@ -20,10 +24,10 @@ int main() {
 
 	cout << "-=-=- False Position method -=-=-" << endl;
 	try {
-		double aproximation = falsePositionMethod(interv, 0.0001);
+		aproximation = falsePositionMethod(interv, 0.00001);
 		cout << "Aproximation: " << aproximation << endl;
 
-		cout << "Function value: " << function(aproximation) << endl;
+		cout << "Function value: " << func.evaluate(aproximation) << endl;
 	}
 	catch (exception e) {
 		cout << e.what() << endl;
