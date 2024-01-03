@@ -1,12 +1,8 @@
-#ifndef Function_H
-#define Function_H
 #include <string>
 
 class Function {
 private:
-
+	std::string expression;
 public:
 	double evaluate(double x);
 };
-
-#endif

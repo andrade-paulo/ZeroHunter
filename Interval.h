@@ -11,14 +11,10 @@ public:
 	// Constructor
 	Interval(double start, double end);
 
-	// Getters and Setters
+	// Get
 	double getStart();
-	
+
 	double getEnd();
-	
-	void setStart(double start);
-	
-	void setEnd(double end);
 
 	// toString
 	std::string toString();

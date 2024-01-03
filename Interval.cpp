@@ -13,19 +13,11 @@ Interval::Interval(double start, double end) {
 }
 
 double Interval::getStart() {
-	return start;
+	return this->start;
 }
 
 double Interval::getEnd() {
-	return end;
-}
-
-void Interval::setStart(double start) {
-	this->start = start;
-}
-
-void Interval::setEnd(double end) {
-	this->end = end;
+	return this->end;
 }
 
 std::string Interval::toString() {
