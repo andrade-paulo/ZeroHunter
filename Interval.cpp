@@ -12,6 +12,11 @@ Interval::Interval(double start, double end) {
 	}
 }
 
+Interval::Interval() {
+	this->start = 0;
+	this->end = 0;
+}
+
 double Interval::getStart() {
 	return this->start;
 }

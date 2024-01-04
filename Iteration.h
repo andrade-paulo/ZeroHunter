@@ -6,4 +6,3 @@ struct Iteration
 	double approximation[2];
 	unsigned int interationNumber;
 };
-

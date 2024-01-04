@@ -2,10 +2,24 @@
 #include <math.h>
 #include <vector>
 #include "Interval.h"
+#include "Iteration.h"
 #include "Function.h"
+#include "Solution.h"
 
-double function(double);
+class Bisection
+{
+private:
+	Function function;
+	double errorMargin;
+	Interval initialInterval;
+	unsigned int maxIterations;
 
-int interationsNumber(double, double, double&);
+public:
+	Bisection(Function, double, Interval);
 
-double bisectionMethod(Interval, double);
+	Bisection(Function, double, Interval, unsigned int);
+
+	unsigned int interationsNumber(Interval, double);
+
+	Solution evaluate();
+};

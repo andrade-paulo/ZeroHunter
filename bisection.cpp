@@ -1,67 +1,88 @@
-#include "bisection.h"
+#include "Bisection.h"
 using namespace std;
 
-int interationsNumber(double interval_start, double interval_end, double& error) {
-	return (int)ceil((log(interval_end - interval_start) - log(error) / log(2)));
+
+Bisection::Bisection(Function function, double errorMargin, Interval initialInterval) {
+	this->function = function;
+	this->initialInterval = initialInterval;
+	this->errorMargin = errorMargin;
+	this->maxIterations = this->interationsNumber(initialInterval, errorMargin);
 }
 
-double bisectionMethod(Interval initialInterval, double error) {
-	double aproximation, y;
 
-	int maxInterations = interationsNumber(initialInterval.getStart(), initialInterval.getEnd(), error);
+Bisection::Bisection(Function function, double errorMargin, Interval initialInterval, unsigned int maxIterations) {
+	this->function = function;
+	this->initialInterval = initialInterval;
+	this->errorMargin = errorMargin;
+	this->maxIterations = maxIterations;
+}
 
-	vector<Interval> intervals;
-	intervals.push_back(initialInterval);
+
+unsigned int Bisection::interationsNumber(Interval interval, double error) {
+	return (int)ceil((log(interval.getStart() - interval.getEnd()) - log(error) / log(2)));
+}
+
+
+Solution Bisection::evaluate() {
+	double approximation, y;
+
+	vector<Iteration> iterations;
+	iterations.push_back({ initialInterval });
 
 	int iterations = 0;
 
 	double a, b;
-
-	Function func;
 	
-	for (int j = 0; j < intervals.size(); j++) {
-		a = intervals[j].getStart();
-		b = intervals[j].getEnd();
+	for (unsigned int j = 0; j < iterations.size(); j++) {
+		// Intervalo atual
+		a = iterations[j].interval.getStart();
+		b = iterations[j].interval.getEnd();
 
-		aproximation = (a + b) / 2;
-		y = func.evaluate(aproximation);
+		// Aproximação e valor da função no ponto
+		approximation = (a + b) / 2;
+		y = this->function.evaluate(approximation);
+
+		// Atualização da iteração atual
+		iterations[j].approximation[0] = approximation;
+		iterations[j].approximation[1] = y;
+		iterations[j].interationNumber = j;
 
 		cout << "-----------------------------------" << endl
-			<< "Interation: " << iterations << endl
-			<< "Intervals size: " << intervals.size() << endl
+			<< "Iteration: " << j << endl
+			<< "Iterations' vector size: " << iterations.size() << endl
 			<< "Interval: " << a << ", " << b << endl
-			<< "Aproximation: " << aproximation << endl
-			<< "Function value: y = " << y << " | f(a) = " << func.evaluate(a) << " | f(b) = " << func.evaluate(b) << endl
+			<< "Aproximation: " << approximation << endl
+			<< "Function value: y = " << y << " | f(a) = " << this->function.evaluate(a) << " | f(b) = " << this->function.evaluate(b) << endl
 			<< "-----------------------------------" << endl << endl;
 
 		// Condição de aceitação
-		if (func.evaluate(a) * func.evaluate(b) < 0) {
-			if (abs(y) < error || abs(aproximation - a) < error || abs(aproximation - b) < error) {
-				return aproximation;
+		if (this->function.evaluate(a) * this->function.evaluate(b) < 0) {
+			if (abs(y) < this->errorMargin || abs(approximation - a) < this->errorMargin || abs(approximation - b) < this->errorMargin) {
+				return { iterations, {approximation, y} };
 			}
 		} else {
-			if (abs(func.evaluate(a) < error)) {
-				return a;
+			if (abs(this->function.evaluate(a) < this->errorMargin)) {
+				return { iterations, {a, this->function.evaluate(a)} };
 			}
-			else if (abs(func.evaluate(b) < error)) {
-				return b;
+			else if (abs(this->function.evaluate(b) < this->errorMargin)) {
+				return { iterations, {b, this->function.evaluate(b)} };
 			}
 		}
 		
 		// Se a função troca de sinal, então existe uma raiz no intervalo
-		if (y * func.evaluate(a) < 0) {
-			intervals.push_back(Interval(a, aproximation));
+		if (y * this->function.evaluate(a) < 0) {
+			iterations.push_back({ Interval(a, approximation) });
 		}
-		else if (y * func.evaluate(b) < 0) {
-			intervals.push_back(Interval(aproximation, b));
+		else if (y * this->function.evaluate(b) < 0) {
+			iterations.push_back({ Interval(approximation, b) });
 		}
 		// Se não, adiciona ambos os intervalos
 		else {
-			intervals.push_back(Interval(a, aproximation));
-			intervals.push_back(Interval(aproximation, b));
+			iterations.push_back({ Interval(a, approximation) });
+			iterations.push_back({ Interval(approximation, b) });
 		}
 
-		if (iterations++ > maxInterations) {
+		if (j >= this->maxIterations) {
 			throw exception("The method failed to find a solution wihin the max interations number");
 		}
 	}

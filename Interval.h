@@ -10,10 +10,11 @@ private:
 public:
 	// Constructor
 	Interval(double start, double end);
+	Interval();
 
 	// Get
 	double getStart();
-
+	
 	double getEnd();
 
 	// toString
