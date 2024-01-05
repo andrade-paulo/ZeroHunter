@@ -2,69 +2,95 @@
 #include "Function.h"
 using namespace std;
 
-int interationsNumberFP(double interval_start, double interval_end, double& error) {
-	return (int)ceil((log(interval_end - interval_start) - log(error) / log(2)));
+
+FalsePosition::FalsePosition(Function function, double errorMargin, Interval initialInterval, unsigned int maxIterations) {
+	this->function = function;
+	this->errorMargin = errorMargin;
+	this->initialInterval = initialInterval;
+	this->maxIterations = maxIterations;
 }
 
-double falsePositionMethod(Interval initialInterval, double error) {
+
+FalsePosition::FalsePosition(Function function, double errorMargin, Interval initialInterval) {
+	this->function = function;
+	this->errorMargin = errorMargin;
+	this->initialInterval = initialInterval;
+	this->maxIterations = this->interationsNumber(initialInterval, errorMargin);
+}
+
+
+unsigned int FalsePosition::interationsNumber(Interval interval, double error) {
+	return (unsigned int) ceil( (log(interval.getEnd() - interval.getStart()) - log(error)) / log(2) );
+}
+
+
+Solution FalsePosition::evaluate() {
 	double aproximation, y;
 
-	int maxInterations = interationsNumberFP(initialInterval.getStart(), initialInterval.getEnd(), error);
+	int maxInterations = this->interationsNumber(this->initialInterval, this->errorMargin);
 
-	vector<Interval> intervals;
-	intervals.push_back(initialInterval);
-
-	int iterations = 0;
-
-	Function func;
+	vector<Iteration> iterations;
+	iterations.push_back({ initialInterval });
 
 	double a, b;
 
-	for (int j = 0; j < intervals.size(); j++) {
-		a = intervals[j].getStart();
-		b = intervals[j].getEnd();
+	for (int j = 0; j < iterations.size(); j++) {
+		a = iterations[j].interval.getStart();
+		b = iterations[j].interval.getEnd();
 
-		aproximation = (a * abs(func.evaluate(b)) + b * abs(func.evaluate(a))) / (abs(func.evaluate(a)) + abs(func.evaluate(b)));
-		y = func.evaluate(aproximation);
+		aproximation = (a * abs(this->function.evaluate(b)) + b * abs(this->function.evaluate(a))) / (abs(this->function.evaluate(a)) + abs(this->function.evaluate(b)));
+		y = this->function.evaluate(aproximation);
+
+		iterations[j].approximation[0] = aproximation;
+		iterations[j].approximation[1] = y;
+		iterations[j].interationNumber = j;
 
 		cout << "-----------------------------------" << endl
-			<< "Interation: " << iterations << endl
-			<< "Intervals size: " << intervals.size() << endl
+			<< "Interation: " << j << endl
+			<< "Intervals size: " << iterations.size() << endl
 			<< "Interval: " << a << ", " << b << endl
 			<< "Aproximation: " << aproximation << endl
-			<< "Function value: y = " << y << " | f(a) = " << func.evaluate(a) << " | f(b) = " << func.evaluate(b) << endl
+			<< "Function value: y = " << y << " | f(a) = " << this->function.evaluate(a) << " | f(b) = " << this->function.evaluate(b) << endl
 			<< "-----------------------------------" << endl << endl;
 
 		// Condição de aceitação
-		if (func.evaluate(a) * func.evaluate(b) < 0) {
-			if (abs(y) < error || abs(aproximation - a) < error || abs(aproximation - b) < error) {
-				return aproximation;
+		if (this->function.evaluate(a) * this->function.evaluate(b) < 0) {
+			if (abs(y) < this->errorMargin || abs(aproximation - a) < this->errorMargin || abs(aproximation - b) < this->errorMargin) {
+				return { iterations, {aproximation, y} };
 			}
 		} else {
-			if (abs(func.evaluate(a) < error)) {
-				return a;
-			} else if (abs(func.evaluate(b) < error)) {
-				return b;
+			if (abs(this->function.evaluate(a) < this->errorMargin)) {
+				return { iterations, {a, this->function.evaluate(a)} };
+			} else if (abs(this->function.evaluate(b) < this->errorMargin)) {
+				return { iterations, {b, this->function.evaluate(b)} };
 			}
 		}
 
 		// Se a função troca de sinal, então existe uma raiz no intervalo
-		if (y * func.evaluate(a) < 0) {
-			intervals.push_back(Interval(a, aproximation));
+		if (y * this->function.evaluate(a) < 0) {
+			iterations.push_back({ Interval(a, aproximation) });
 		}
-		else if (y * func.evaluate(b) < 0) {
-			intervals.push_back(Interval(aproximation, b));
+		else if (y * this->function.evaluate(b) < 0) {
+			iterations.push_back({ Interval(aproximation, b) });
 		}
 		// Se não, adiciona ambos os intervalos
 		else {
-			intervals.push_back(Interval(a, aproximation));
-			intervals.push_back(Interval(aproximation, b));
+			iterations.push_back({ Interval(a, aproximation) });
+			iterations.push_back({ Interval(aproximation, b) });
 		}
 
-		if (iterations++ > maxInterations) {
+		if (j >= maxInterations) {
 			throw exception("The method failed to find a solution wihin the max interations number");
 		}
 	}
 
 	throw exception("The method failed to find a solution");
+}
+
+
+string FalsePosition::toString() {
+	return "Function: " + this->function.toString() + "\n"
+		+ "Error margin: " + std::to_string(this->errorMargin) + "\n"
+		+ "Initial interval: " + initialInterval.toString() + "\n"
+		+ "Max interations: " + std::to_string(this->maxIterations) + "\n";
 }

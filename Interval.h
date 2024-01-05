@@ -1,5 +1,5 @@
-#ifndef Interval_H
-#define Interval_H
+#pragma once
+
 #include <string>
 
 class Interval {
@@ -20,5 +20,3 @@ public:
 	// toString
 	std::string toString();
 };
-
-#endif

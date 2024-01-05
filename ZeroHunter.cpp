@@ -5,18 +5,24 @@ int main() {
 	// Bisection test
 	Interval interv(-4, 2);
 
-	double aproximation;
-
 	Function func;
+
+	Solution solutionBisection;
+	Solution solutionFalsePosition;
 
 	cout << "-=-=- Bisection method -=-=-" << endl;
 	try {
-		aproximation = bisectionMethod(interv, 0.00001);
-		cout << "Aproximation: " << aproximation << endl;
+		Bisection bisection(func, 0.0001, interv);
 
-		cout << "Function value: " << func.evaluate(aproximation) << endl;
+		cout << bisection.toString() << endl << endl;
+
+		solutionBisection = bisection.evaluate();
+
+		cout << "Solution:" << endl
+			<< "X Approximation: " << solutionBisection.approximation[0] << endl
+			<< "Y Approximation: " << solutionBisection.approximation[1] << endl << endl;
 	}
-	catch (exception e) {
+	catch (exception e) { 
 		cout << e.what() << endl;
 	}
 
@@ -24,10 +30,14 @@ int main() {
 
 	cout << "-=-=- False Position method -=-=-" << endl;
 	try {
-		aproximation = falsePositionMethod(interv, 0.00001);
-		cout << "Aproximation: " << aproximation << endl;
+		FalsePosition falsePosition(func, 0.00001, interv);
 
-		cout << "Function value: " << func.evaluate(aproximation) << endl;
+		cout << falsePosition.toString() << endl << endl;
+		solutionFalsePosition = falsePosition.evaluate();
+
+		cout << "Solution:" << endl
+			<< "X Approximation: " << solutionFalsePosition.approximation[0] << endl
+			<< "Y Approximation: " << solutionFalsePosition.approximation[1] << endl << endl;
 	}
 	catch (exception e) {
 		cout << e.what() << endl;

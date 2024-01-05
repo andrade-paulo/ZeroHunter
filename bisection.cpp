@@ -2,6 +2,14 @@
 using namespace std;
 
 
+Bisection::Bisection() {
+	this->function = Function();
+	this->initialInterval = Interval();
+	this->errorMargin = 0.0001;
+	this->maxIterations = this->interationsNumber(this->initialInterval, this->errorMargin);
+}
+
+
 Bisection::Bisection(Function function, double errorMargin, Interval initialInterval) {
 	this->function = function;
 	this->initialInterval = initialInterval;
@@ -19,7 +27,7 @@ Bisection::Bisection(Function function, double errorMargin, Interval initialInte
 
 
 unsigned int Bisection::interationsNumber(Interval interval, double error) {
-	return (int)ceil((log(interval.getStart() - interval.getEnd()) - log(error) / log(2)));
+	return (unsigned int) ceil( (log(interval.getEnd() - interval.getStart()) - log(error)) / log(2) );
 }
 
 
@@ -28,8 +36,6 @@ Solution Bisection::evaluate() {
 
 	vector<Iteration> iterations;
 	iterations.push_back({ initialInterval });
-
-	int iterations = 0;
 
 	double a, b;
 	
@@ -88,4 +94,12 @@ Solution Bisection::evaluate() {
 	}
 
 	throw exception("The method failed to find a solution");
+}
+
+
+string Bisection::toString() {
+	return "Function: " + this->function.toString() + "\n"
+		+ "Error margin: " + to_string(this->errorMargin) + "\n"
+		+ "Initial interval: " + this->initialInterval.toString() + "\n"
+		+ "Max iterations: " + to_string(this->maxIterations);
 }

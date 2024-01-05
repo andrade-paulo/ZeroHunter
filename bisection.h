@@ -1,6 +1,9 @@
+#pragma once
+
 #include <iostream>
 #include <math.h>
 #include <vector>
+
 #include "Interval.h"
 #include "Iteration.h"
 #include "Function.h"
@@ -15,6 +18,8 @@ private:
 	unsigned int maxIterations;
 
 public:
+	Bisection();
+
 	Bisection(Function, double, Interval);
 
 	Bisection(Function, double, Interval, unsigned int);
@@ -22,4 +27,6 @@ public:
 	unsigned int interationsNumber(Interval, double);
 
 	Solution evaluate();
+
+	std::string toString();
 };

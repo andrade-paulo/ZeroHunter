@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include "Iteration.h"
 #include "Interval.h"
