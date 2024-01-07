@@ -2,45 +2,76 @@
 using namespace std;
 
 int main() {
-	// Bisection test
-	Interval interv(-4, 2);
 
 	Function func;
+	double a, b, errorMargin;
+	char method;
 
-	Solution solutionBisection;
-	Solution solutionFalsePosition;
+	cout << "Initial interval: ";
+	cin >> a >> b;
 
-	cout << "-=-=- Bisection method -=-=-" << endl;
-	try {
-		Bisection bisection(func, 0.0001, interv);
+	Interval interv(a, b);
+	
+	cout << endl;
 
-		cout << bisection.toString() << endl << endl;
+	cout << "Error margin: ";
+	cin >> errorMargin;
 
-		solutionBisection = bisection.evaluate();
+	cout << endl;
 
-		cout << "Solution:" << endl
-			<< "X Approximation: " << solutionBisection.approximation[0] << endl
-			<< "Y Approximation: " << solutionBisection.approximation[1] << endl << endl;
-	}
-	catch (exception e) { 
-		cout << e.what() << endl;
-	}
+	cout << "Choose method" << endl
+		<< "1. Bisection" << endl
+		<< "2. False Position" << endl
+		<< ": ";
+	cin >> method;
 
 	cout << endl << endl;
 
-	cout << "-=-=- False Position method -=-=-" << endl;
-	try {
-		FalsePosition falsePosition(func, 0.00001, interv);
+	Solution solution;
+	
+	switch (method) {
+	case '1':
+		cout << "-=-=- Bisection method -=-=-" << endl;
+		
+		try {
+			Bisection bisection(func, 0.0001, interv);
 
-		cout << falsePosition.toString() << endl << endl;
-		solutionFalsePosition = falsePosition.evaluate();
+			cout << bisection.toString() << endl << endl;
 
-		cout << "Solution:" << endl
-			<< "X Approximation: " << solutionFalsePosition.approximation[0] << endl
-			<< "Y Approximation: " << solutionFalsePosition.approximation[1] << endl << endl;
-	}
-	catch (exception e) {
-		cout << e.what() << endl;
+			solution = bisection.evaluate();
+
+			cout << "Solution:" << endl
+				<< "X Approximation: " << solution.approximation[0] << endl
+				<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+		}
+		catch (exception e) {
+			cout << e.what() << endl;
+		}
+
+		break;
+
+	case '2':
+		cout << "-=-=- False Position method -=-=-" << endl;
+
+		try {
+			FalsePosition falsePosition(func, 0.00001, interv);
+
+			cout << falsePosition.toString() << endl << endl;
+			solution = falsePosition.evaluate();
+
+			cout << "Solution:" << endl
+				<< "X Approximation: " << solution.approximation[0] << endl
+				<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+		}
+		catch (exception e) {
+			cout << e.what() << endl;
+		}
+
+		break;
+
+	default:
+		cout << "Invalid method" << endl;
+		return 0;
 	}
 
 	return 0;
