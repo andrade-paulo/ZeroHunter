@@ -2,7 +2,7 @@
 
 // Methods implementation
 double Function::evaluate(double x) {
-	return pow(x, 2) + 5 * x;
+	return sin(2*x) + cos(x/2);
 }
 
 
