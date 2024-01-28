@@ -1,4 +1,4 @@
-#include "Bisection.h"
+#include "bisection.h"
 using namespace std;
 
 
@@ -89,11 +89,11 @@ Solution Bisection::evaluate() {
 		}
 
 		if (j >= this->maxIterations) {
-			throw exception("The method failed to find a solution wihin the max interations number");
+			throw runtime_error("The method failed to find a solution wihin the max interations number");
 		}
 	}
 
-	throw exception("The method failed to find a solution");
+	throw runtime_error("The method failed to find a solution");
 }
 
 

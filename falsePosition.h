@@ -4,10 +4,10 @@
 #include <math.h>
 #include <vector>
 
-#include "Interval.h"
-#include "Iteration.h"
-#include "Function.h"
-#include "Solution.h"
+#include "interval.h"
+#include "iteration.h"
+#include "function.h"
+#include "solution.h"
 
 class FalsePosition
 {

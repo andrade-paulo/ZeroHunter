@@ -1,5 +1,5 @@
 #include "falsePosition.h"
-#include "Function.h"
+#include "function.h"
 using namespace std;
 
 
@@ -80,11 +80,11 @@ Solution FalsePosition::evaluate() {
 		}
 
 		if (j >= maxInterations) {
-			throw exception("The method failed to find a solution wihin the max interations number");
+			throw runtime_error("The method failed to find a solution wihin the max interations number");
 		}
 	}
 
-	throw exception("The method failed to find a solution");
+	throw runtime_error("The method failed to find a solution");
 }
 
 
