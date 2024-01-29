@@ -30,6 +30,7 @@ int main() {
 			<< "1. Bisection" << endl
 			<< "2. False Position" << endl
 			<< "3. Fixed Point" << endl
+			<< "4. Newton Method" << endl
 			<< ": ";
 		cin >> method;
 
@@ -96,6 +97,25 @@ int main() {
 
 			break;
 
+		case '4':
+            cout << "-=-=- Newton Method -=-=-" << endl;
+
+			try {
+				NewtonMethod newtonMethod(func, func, 0.00001, initialPoint, 30);
+
+				cout << newtonMethod.toString() << endl << endl;
+				Solution solution = newtonMethod.evaluate();
+
+				cout << "Solution:" << endl
+					<< "X Approximation: " << solution.approximation[0] << endl
+					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+			}
+			catch (const runtime_error& e) {
+				cout << e.what() << endl;
+			}
+
+			break;
+
 		default:
 			cout << "Invalid method" << endl;
 			return 0;
@@ -103,6 +123,7 @@ int main() {
 
 		cout << "Do you want to exit? (0/1): ";
 		cin >> exit;
+		cout << endl;
 	} while (!exit);
 
 	return 0;

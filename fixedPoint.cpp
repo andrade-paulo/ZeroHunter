@@ -1,5 +1,4 @@
 #include "fixedPoint.h"
-#include "function.h"
 using namespace std;
 
 
@@ -19,6 +18,7 @@ Solution FixedPoint::evaluate() {
 
 	for (int i = 0; iterations.size() <= this->maxIterations; i++) {
 		approximation = this->iteractionFunction.evaluateIteraction(iterations[i].point);
+		
 		y = this->function.evaluate(approximation);
 
 		iterations[i].approximation[0] = approximation;
@@ -39,7 +39,7 @@ Solution FixedPoint::evaluate() {
 			}
 		} 
         
-        if (abs(approximation) < this->errorMargin) {
+        if (abs(y) < this->errorMargin) {
 				return { iterations, {approximation, y} };
 		} 
 

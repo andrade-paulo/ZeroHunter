@@ -1,0 +1,60 @@
+
+#include "newtonMethod.h"
+using namespace std;
+
+
+NewtonMethod::NewtonMethod(Function function, Function iteractionFunction, double errorMargin, double initialPoint, unsigned int maxIterations) {
+	this->function = function;
+	this->iteractionFunction = iteractionFunction;
+	this->errorMargin = errorMargin;
+	this->initialPoint = initialPoint;
+	this->maxIterations = maxIterations;
+}
+
+Solution NewtonMethod::evaluate() {
+	double approximation, y;
+
+	vector<Iteration> iterations;
+	iterations.push_back({ .point = this->initialPoint });
+
+	for (int i = 0; iterations.size() <= this->maxIterations; i++) {
+		approximation = this->iteractionFunction.evaluateIteraction(iterations[i].point, this->errorMargin);
+		
+		y = this->function.evaluate(approximation);
+
+		iterations[i].approximation[0] = approximation;
+		iterations[i].approximation[1] = y;
+		iterations[i].interationNumber = i;
+
+		cout << "-----------------------------------" << endl
+			<< "Interation: " << i << endl
+			<< "Point: " << iterations[i].point << endl
+			<< "Approximation: " << approximation << endl
+			<< "Function value: " << y << endl 
+			<< "-----------------------------------" << endl << endl;
+
+		// Condição de aceitação
+		if (iterations.size() >= 2) {
+			if (abs( approximation - iterations[i-1].point ) < this->errorMargin) {
+				return { iterations, {approximation, y} };
+			}
+		} 
+        
+        if (abs(y) < this->errorMargin) {
+				return { iterations, {approximation, y} };
+		} 
+
+        iterations.push_back({ .point = approximation });
+	}
+
+	throw runtime_error("The method failed to find a solution wihin the max interations number");
+}
+
+
+string NewtonMethod::toString() {
+	return "Function: " + this->function.toString() + "\n"
+		+ "Iteration Function: " + this->iteractionFunction.toString() + "\n"
+		+ "Error margin: " + std::to_string(this->errorMargin) + "\n"
+		+ "Initial point: " + std::to_string(this->initialPoint) + "\n"
+		+ "Max interations: " + std::to_string(this->maxIterations) + "\n";
+}

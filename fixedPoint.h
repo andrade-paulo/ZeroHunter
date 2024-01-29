@@ -4,7 +4,6 @@
 #include <math.h>
 #include <vector>
 
-#include "interval.h"
 #include "iteration.h"
 #include "function.h"
 #include "solution.h"
