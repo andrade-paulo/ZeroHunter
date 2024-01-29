@@ -8,7 +8,7 @@ private:
 	std::string expression;
 public:
 	double evaluate(double);
-    double evaluateIteraction(double);
+	double evaluateIteraction(double);
 
 	std::string toString();
 };

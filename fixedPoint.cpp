@@ -11,11 +11,11 @@ FixedPoint::FixedPoint(Function function, Function iteractionFunction, double er
 	this->maxIterations = maxIterations;
 }
 
-SolutionPoint FixedPoint::evaluate() {
+Solution FixedPoint::evaluate() {
 	double approximation, y;
 
-	vector<IterationPoint> iterations;
-	iterations.push_back({ this->initialPoint });
+	vector<Iteration> iterations;
+	iterations.push_back({ .point = this->initialPoint });
 
 	for (int i = 0; iterations.size() <= this->maxIterations; i++) {
 		approximation = this->iteractionFunction.evaluateIteraction(iterations[i].point);
@@ -43,7 +43,7 @@ SolutionPoint FixedPoint::evaluate() {
 				return { iterations, {approximation, y} };
 		} 
 
-        iterations.push_back({ approximation });
+        iterations.push_back({ .point = approximation });
 	}
 
 	throw runtime_error("The method failed to find a solution wihin the max interations number");

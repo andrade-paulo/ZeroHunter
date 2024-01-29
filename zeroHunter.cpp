@@ -52,7 +52,7 @@ int main() {
 					<< "X Approximation: " << solution.approximation[0] << endl
 					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
 			}
-			catch (exception e) {
+			catch (const runtime_error& e) {
 				cout << e.what() << endl;
 			}
 
@@ -71,7 +71,7 @@ int main() {
 					<< "X Approximation: " << solution.approximation[0] << endl
 					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
 			}
-			catch (exception e) {
+			catch (const runtime_error& e) {
 				cout << e.what() << endl;
 			}
 
@@ -84,13 +84,13 @@ int main() {
 				FixedPoint fixedPoint(func, func, 0.00001, initialPoint, 30);
 
 				cout << fixedPoint.toString() << endl << endl;
-				SolutionPoint solution = fixedPoint.evaluate();
+				Solution solution = fixedPoint.evaluate();
 
 				cout << "Solution:" << endl
 					<< "X Approximation: " << solution.approximation[0] << endl
 					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
 			}
-			catch (exception e) {
+			catch (const runtime_error& e) {
 				cout << e.what() << endl;
 			}
 

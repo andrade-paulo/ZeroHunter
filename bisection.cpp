@@ -67,10 +67,10 @@ Solution Bisection::evaluate() {
 				return { iterations, {approximation, y} };
 			}
 		} else {
-			if (abs(this->function.evaluate(a) < this->errorMargin)) {
+			if (abs(this->function.evaluate(a)) < this->errorMargin) {
 				return { iterations, {a, this->function.evaluate(a)} };
 			}
-			else if (abs(this->function.evaluate(b) < this->errorMargin)) {
+			else if (abs(this->function.evaluate(b)) < this->errorMargin) {
 				return { iterations, {b, this->function.evaluate(b)} };
 			}
 		}

@@ -21,7 +21,7 @@ private:
 public:
 	FixedPoint(Function, Function, double, double, unsigned int);
 
-	SolutionPoint evaluate();
+	Solution evaluate();
 
 	std::string toString();
 };
