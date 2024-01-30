@@ -9,6 +9,7 @@ private:
 public:
 	double evaluate(double);
 	double evaluateIteraction(double, double h = 0);
+	double evaluateSecant(double, double);
 	double evaluateDerivative(double, double);
 
 	std::string toString();

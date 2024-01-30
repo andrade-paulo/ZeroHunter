@@ -8,4 +8,5 @@ struct Iteration
 	double point;
 	double approximation[2];
 	unsigned int interationNumber;
+	double points[2];
 };

@@ -4,3 +4,4 @@
 #include "bisection.h"
 #include "fixedPoint.h"
 #include "newtonMethod.h"
+#include "secantMethod.h"

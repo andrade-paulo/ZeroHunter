@@ -1,23 +1,29 @@
-#include "newtonMethod.h"
+#include "secantMethod.h"
 using namespace std;
 
 
-NewtonMethod::NewtonMethod(Function function, Function iteractionFunction, double errorMargin, double initialPoint, unsigned int maxIterations) {
+SecantMethod::SecantMethod(Function function, Function iteractionFunction, double errorMargin, double points[2], unsigned int maxIterations) {
 	this->function = function;
 	this->iteractionFunction = iteractionFunction;
 	this->errorMargin = errorMargin;
-	this->initialPoint = initialPoint;
+	this->points[0] = points[0];
+	this->points[1] = points[1];
 	this->maxIterations = maxIterations;
 }
 
-Solution NewtonMethod::evaluate() {
+Solution SecantMethod::evaluate() {
 	double approximation, y;
 
 	vector<Iteration> iterations;
-	iterations.push_back({ .point = this->initialPoint });
+
+	Iteration newIteration;
+	newIteration.points[0] = this->points[0];
+	newIteration.points[1] = this->points[1];
+
+	iterations.push_back(newIteration);
 
 	for (int i = 0; iterations.size() <= this->maxIterations; i++) {
-		approximation = this->iteractionFunction.evaluateIteraction(iterations[i].point, this->errorMargin);
+		approximation = this->iteractionFunction.evaluateSecant(iterations[i].points[0], iterations[i].points[1]);
 		
 		y = this->function.evaluate(approximation);
 
@@ -27,14 +33,14 @@ Solution NewtonMethod::evaluate() {
 
 		cout << "-----------------------------------" << endl
 			<< "Interation: " << i << endl
-			<< "Point: " << iterations[i].point << endl
+			<< "Points: " << iterations[i].points[0] << " | " << iterations[i].points[1] << endl
 			<< "Approximation: " << approximation << endl
 			<< "Function value: " << y << endl 
 			<< "-----------------------------------" << endl << endl;
 
 		// Condição de aceitação
 		if (iterations.size() >= 2) {
-			if (abs( approximation - iterations[i-1].point ) < this->errorMargin) {
+			if (abs( approximation - iterations[i-1].points[1] ) < this->errorMargin) {
 				return { iterations, {approximation, y} };
 			}
 		} 
@@ -43,17 +49,20 @@ Solution NewtonMethod::evaluate() {
 				return { iterations, {approximation, y} };
 		} 
 
-        iterations.push_back({ .point = approximation });
+		newIteration.points[0] = iterations[i].points[1];
+		newIteration.points[1] = approximation;
+
+		iterations.push_back(newIteration);
 	}
 
 	throw runtime_error("The method failed to find a solution wihin the max interations number");
 }
 
 
-string NewtonMethod::toString() {
+string SecantMethod::toString() {
 	return "Function: " + this->function.toString() + "\n"
 		+ "Iteration Function: " + this->iteractionFunction.toString() + "\n"
 		+ "Error margin: " + std::to_string(this->errorMargin) + "\n"
-		+ "Initial point: " + std::to_string(this->initialPoint) + "\n"
+		+ "Initial points: " + std::to_string(this->points[0]) + " | " + std::to_string(this->points[1]) + "\n"
 		+ "Max interations: " + std::to_string(this->maxIterations) + "\n";
 }

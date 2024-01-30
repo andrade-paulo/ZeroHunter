@@ -3,129 +3,177 @@ using namespace std;
 
 int main() {
 
-	Function func;
-	double a, b, errorMargin, initialPoint;
-	char method;
-	bool exit;
+		Function func;
+		double a, b, errorMargin, initialPoint;
+		char method;
+		bool exit;
 
-	do {
-		cout << "-=-=- ZeroHunter -=-=-" << endl;
+		do {
+				cout << "-=-=- ZeroHunter -=-=-" << endl;
 
-		cout << "Initial interval: ";
-		cin >> a >> b;
+				cout << "Error margin: ";
+				cin >> errorMargin;
 
-        cout << "Initial point: ";
-        cin >> initialPoint;
+				cout << endl;
 
-		Interval interv(a, b);
+				cout << "Choose method" << endl
+						<< "1. Bisection" << endl
+						<< "2. False Position" << endl
+						<< "3. Fixed Point" << endl
+						<< "4. Newton Method" << endl
+						<< "5. Secant Method" << endl
+						<< ": ";
+				cin >> method;
 
-		cout << endl;
+				cout << endl << endl;
 
-		cout << "Error margin: ";
-		cin >> errorMargin;
+				Solution solution;
 
-		cout << endl;
+				switch (method) {
+						case '1': {
+								cout << "-=-=- Bisection method -=-=-" << endl;
 
-		cout << "Choose method" << endl
-			<< "1. Bisection" << endl
-			<< "2. False Position" << endl
-			<< "3. Fixed Point" << endl
-			<< "4. Newton Method" << endl
-			<< ": ";
-		cin >> method;
+								cout << "Initial interval: ";
+								cin >> a >> b;
+								Interval interv(a, b);
 
-		cout << endl << endl;
+								cout << endl;
 
-		Solution solution;
+								try {
+										Bisection bisection(func, errorMargin, interv);
 
-		switch (method) {
-		case '1':
-			cout << "-=-=- Bisection method -=-=-" << endl;
+										cout << bisection.toString() << endl << endl;
 
-			try {
-				Bisection bisection(func, 0.0001, interv);
+										solution = bisection.evaluate();
 
-				cout << bisection.toString() << endl << endl;
+										cout << "Solution:" << endl
+												<< "X Approximation: " << solution.approximation[0] << endl
+												<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+								}
+								catch (const runtime_error& e) {
+										cout << e.what() << endl;
+								}
 
-				solution = bisection.evaluate();
+								break;
+						}
 
-				cout << "Solution:" << endl
-					<< "X Approximation: " << solution.approximation[0] << endl
-					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
-			}
-			catch (const runtime_error& e) {
-				cout << e.what() << endl;
-			}
+						case '2': {
+								cout << "-=-=- False Position method -=-=-" << endl;
 
-			break;
+								cout << "Initial interval: ";
+								cin >> a >> b;
+								Interval interv(a, b);
 
-		case '2':
-			cout << "-=-=- False Position method -=-=-" << endl;
+								cout << endl;
 
-			try {
-				FalsePosition falsePosition(func, 0.00001, interv);
+								try {
+										FalsePosition falsePosition(func, errorMargin, interv);
 
-				cout << falsePosition.toString() << endl << endl;
-				solution = falsePosition.evaluate();
+										cout << falsePosition.toString() << endl << endl;
+										solution = falsePosition.evaluate();
 
-				cout << "Solution:" << endl
-					<< "X Approximation: " << solution.approximation[0] << endl
-					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
-			}
-			catch (const runtime_error& e) {
-				cout << e.what() << endl;
-			}
+										cout << "Solution:" << endl
+												<< "X Approximation: " << solution.approximation[0] << endl
+												<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+								}
+								catch (const runtime_error& e) {
+										cout << e.what() << endl;
+								}
 
-			break;
+								break;
+						}
 
-        case '3':
-            cout << "-=-=- Fixed Point method -=-=-" << endl;
+						case '3': {
+								cout << "-=-=- Fixed Point method -=-=-" << endl;
 
-			try {
-				FixedPoint fixedPoint(func, func, 0.00001, initialPoint, 30);
+								cout << "Initial point: ";
+								cin >> initialPoint;
 
-				cout << fixedPoint.toString() << endl << endl;
-				Solution solution = fixedPoint.evaluate();
+								cout << endl;
 
-				cout << "Solution:" << endl
-					<< "X Approximation: " << solution.approximation[0] << endl
-					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
-			}
-			catch (const runtime_error& e) {
-				cout << e.what() << endl;
-			}
+								try {
+										FixedPoint fixedPoint(func, func, errorMargin, initialPoint, 30);
 
-			break;
+										cout << fixedPoint.toString() << endl << endl;
+										Solution solution = fixedPoint.evaluate();
 
-		case '4':
-            cout << "-=-=- Newton Method -=-=-" << endl;
+										cout << "Solution:" << endl
+												<< "X Approximation: " << solution.approximation[0] << endl
+												<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+								}
+								catch (const runtime_error& e) {
+										cout << e.what() << endl;
+								}
 
-			try {
-				NewtonMethod newtonMethod(func, func, 0.00001, initialPoint, 30);
+								break;
 
-				cout << newtonMethod.toString() << endl << endl;
-				Solution solution = newtonMethod.evaluate();
+						}
 
-				cout << "Solution:" << endl
-					<< "X Approximation: " << solution.approximation[0] << endl
-					<< "Y Approximation: " << solution.approximation[1] << endl << endl;
-			}
-			catch (const runtime_error& e) {
-				cout << e.what() << endl;
-			}
+						case '4': {
+								cout << "-=-=- Newton Method -=-=-" << endl;
 
-			break;
+								cout << "Initial point: ";
+								cin >> initialPoint;
 
-		default:
-			cout << "Invalid method" << endl;
-			return 0;
-		}
+								cout << endl;
 
-		cout << "Do you want to exit? (0/1): ";
-		cin >> exit;
-		cout << endl;
-	} while (!exit);
+								try {
+										NewtonMethod newtonMethod(func, func, errorMargin, initialPoint, 30);
 
-	return 0;
+										cout << newtonMethod.toString() << endl << endl;
+										Solution solution = newtonMethod.evaluate();
+
+										cout << "Solution:" << endl
+												<< "X Approximation: " << solution.approximation[0] << endl
+												<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+								}
+								catch (const runtime_error& e) {
+										cout << e.what() << endl;
+								}
+
+								break;
+
+						}
+
+						case '5': {
+								cout << "-=-=- Secant method -=-=-" << endl;
+
+								cout << "Initial points: ";
+								cin >> a >> b;
+
+								double points[2] = {a, b};
+
+								cout << endl;
+
+								try {
+										SecantMethod secantMethod(func, func, errorMargin, points, 30);
+
+										cout << secantMethod.toString() << endl << endl;
+										solution = secantMethod.evaluate();
+
+										cout << "Solution:" << endl
+												<< "X Approximation: " << solution.approximation[0] << endl
+												<< "Y Approximation: " << solution.approximation[1] << endl << endl;
+								}
+								catch (const runtime_error& e) {
+										cout << e.what() << endl;
+								}
+
+								break;
+
+						}
+
+						default: {
+								cout << "Invalid method" << endl;
+								return 0;
+						}
+				}
+
+				cout << "Do you want to exit? (0/1): ";
+				cin >> exit;
+				cout << endl;
+		} while (!exit);
+
+		return 0;
 }
 
